@@ -37,7 +37,6 @@ const Search = props => {
   const loadMoreData = () => {
     if (pageNumber * 20 < news.totalResults) {
       setPageNumber(pageNumber + 1);
-      getFilteredNews(pageNumber);
     }
   };
 
