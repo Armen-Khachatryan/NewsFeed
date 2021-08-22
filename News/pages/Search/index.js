@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, FlatList, Text, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {getFilteredNews} from '../../redux/actions';
+import {getFilteredNews, removeNews} from '../../redux/actions';
 import styles from './styles';
 
 const NewsItem = ({item}) => {
@@ -28,7 +28,7 @@ const NewsItem = ({item}) => {
 };
 
 const Search = props => {
-  const {getFilteredNews, news} = props;
+  const {getFilteredNews, removeNews, news} = props;
   const [pageNumber, setPageNumber] = useState(1);
   useEffect(() => {
     getFilteredNews(pageNumber);
@@ -60,6 +60,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getFilteredNews: pageNumber => dispatch(getFilteredNews(pageNumber)),
+    removeNews: () => dispatch(removeNews()),
   };
 };
 

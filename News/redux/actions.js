@@ -25,11 +25,23 @@ export function getFilteredNews(pageNumber) {
     makeGetRequest(
       `/top-headlines?country=${selectedSource.country}&category=${selectedSource.category}&language=${selectedSource.language}&page=${pageNumber}&apiKey=${API_KEY}`,
     ).then(response => {
-      dispatch(success(response.data));
+      if (pageNumber === 1) {
+        dispatch(successFirstPage(response.data));
+      } else {
+        dispatch(paginate(response.data));
+      }
     });
   };
 
-  function success(payload) {
+  function successFirstPage(payload) {
     return {type: 'NEWS_LOADED', payload};
   }
+
+  function paginate(payload) {
+    return {type: 'PAGINATE', payload};
+  }
 }
+
+export const removeNews = () => {
+  return {type: 'REMOVE_NEWS'};
+};

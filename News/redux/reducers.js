@@ -16,18 +16,17 @@ function rootReducer(state = initialState, action) {
     });
   }
   if (action.type === 'NEWS_LOADED') {
-    if (Object.keys(state.news).length) {
-      return Object.assign({}, state, {
-        news: {
-          ...state.news,
-          articles: [...state.news.articles, ...action.payload.articles],
-        },
-      });
-    } else {
-      return Object.assign({}, state, {
-        news: action.payload,
-      });
-    }
+    return Object.assign({}, state, {
+      news: action.payload,
+    });
+  }
+  if (action.type === 'PAGINATE') {
+    return Object.assign({}, state, {
+      news: {
+        ...state.news,
+        articles: [...state.news.articles, ...action.payload.articles],
+      },
+    });
   }
   return state;
 }
