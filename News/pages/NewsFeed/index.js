@@ -3,7 +3,7 @@ import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 import {countries} from '../../constants/countries';
 import {languages} from '../../constants/languages';
-import {getSources, selectSource} from '../../redux/actions';
+import {getSources, filterNews} from '../../redux/actions';
 import styles from './styles';
 
 const NewsSource = ({item, openSource}) => {
@@ -14,10 +14,7 @@ const NewsSource = ({item, openSource}) => {
       }}
       style={styles.container}>
       <Text style={styles.title}>{item.name}</Text>
-      <Text
-        style={styles.description}>
-        {item.description}
-      </Text>
+      <Text style={styles.description}>{item.description}</Text>
       <View
         style={{
           flexDirection: 'row',
@@ -33,7 +30,7 @@ const NewsSource = ({item, openSource}) => {
 };
 
 const NewsFeed = props => {
-  const {sources, getSources, selectSource, navigation} = props;
+  const {sources, getSources, filterNews, navigation} = props;
 
   useEffect(() => {
     getSources();
@@ -46,7 +43,7 @@ const NewsFeed = props => {
         <NewsSource
           item={source.item}
           openSource={() => {
-            selectSource(source.item);
+            filterNews(source.item);
             navigation.navigate('Search');
           }}
         />
@@ -65,7 +62,8 @@ const mapStateToProps = state => {
 const mapDispatchtoProps = dispatch => {
   return {
     getSources: () => dispatch(getSources()),
-    selectSource: newsSource => dispatch(selectSource(newsSource)),
+    filterNews: newsSource => dispatch(filterNews(newsSource)),
   };
 };
+
 export default connect(mapStateToProps, mapDispatchtoProps)(NewsFeed);

@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View, FlatList, Text, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {getFilteredNews, removeNews} from '../../redux/actions';
+import {getFilteredNews} from '../../redux/actions';
 import styles from './styles';
 
-const NewsItem = ({item}) => {
+const renderItem = ({item}) => {
   return (
-    <View style={styles.container}>
+    <View key={item.urlToImage} style={styles.container}>
       <Image style={styles.image} source={{uri: item?.urlToImage}} />
       <View style={styles.description}>
         <Text numberOfLines={2} style={{fontSize: 16}}>
@@ -28,13 +28,13 @@ const NewsItem = ({item}) => {
 };
 
 const Search = props => {
-  const {getFilteredNews, removeNews, news} = props;
+  const {getFilteredNews, news} = props;
   const [pageNumber, setPageNumber] = useState(1);
   useEffect(() => {
     getFilteredNews(pageNumber);
   }, [pageNumber]);
 
-  const loadMoreData = () => {
+  const goToNextPage = () => {
     if (pageNumber * 20 < news.totalResults) {
       setPageNumber(pageNumber + 1);
     }
@@ -43,9 +43,8 @@ const Search = props => {
   return (
     <FlatList
       data={news?.articles}
-      renderItem={article => <NewsItem item={article.item} />}
-      keyExtractor={item => item.id}
-      onEndReached={loadMoreData}
+      renderItem={renderItem}
+      onEndReached={goToNextPage}
       onEndReachedThreshold={0.1}
     />
   );
@@ -60,7 +59,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getFilteredNews: pageNumber => dispatch(getFilteredNews(pageNumber)),
-    removeNews: () => dispatch(removeNews()),
   };
 };
 
